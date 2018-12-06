@@ -2,7 +2,6 @@
 
 /// compy and paste in chrome dev tools console and get the sum
 
-
 ///// problem 2
 let changes = `-15
 -17
@@ -970,18 +969,21 @@ let changes = `-15
 -17
 +11
 +8
-+125143`.split("\n").map(n => Number(n));
++125143`
+  .split("\n")
+  .map(n => Number(n));
+
 let found = null;
 let frequencies = {};
 let current = 0;
 
-while(!found) {
+while (!found) {
   changes.reduce((sum, change) => {
-    if(found != null) return sum;
+    if (found != null) return sum;
 
     current = sum + change;
 
-    if(frequencies[current]) {
+    if (frequencies[current]) {
       found = current;
       console.log(`found -> ${current}`);
       return current;
@@ -989,8 +991,6 @@ while(!found) {
 
     frequencies[current] = true;
 
-    return current
-
+    return current;
   }, current);
-
 }

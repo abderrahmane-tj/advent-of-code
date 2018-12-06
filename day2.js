@@ -250,9 +250,9 @@ jbrenqtlagwoivmwyscfukhodp
 jbrenqtlagnhivmwyscfuszovp`;
 
 const processed = strings
-.split("\n")
-.map(processKeepString)
-.filter(({ occurences }) => Object.keys(occurences).length);
+  .split("\n")
+  .map(processKeepString)
+  .filter(({ occurences }) => Object.keys(occurences).length);
 
 const processedIds = processed.map(({ string }) => string);
 
