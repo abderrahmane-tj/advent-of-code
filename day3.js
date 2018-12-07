@@ -1250,11 +1250,12 @@ let size = 1000;
 let canvas = Array.from({ length: size }, () =>
   Array.from({ length: size }, () => ".")
 );
+let valid = {};
 
 let tooManyClaims = 0;
 let data = buildDataFromString(input);
-data.forEach(paint)
-console.log(tooManyClaims);
+data.forEach(paint);
+console.log(tooManyClaims, valid);
 // id, x, y, w, h
 // #id @ x,y : wxh
 ///////
@@ -1267,7 +1268,10 @@ function buildDataFromString(input) {
       .split("|");
     return {
       id,
-      x: Number(x), y: Number(y), w: Number(w), h: Number(h)
+      x: Number(x),
+      y: Number(y),
+      w: Number(w),
+      h: Number(h)
     };
   });
 }
@@ -1279,10 +1283,16 @@ function paint({ id, x, y, w, h }) {
       switch (cell) {
         case ".":
           canvas[i][j] = id;
+          if (!valid.hasOwnProperty(`id-${id}`)) {
+            valid[`id-${id}`] = true;
+          }
           break;
         case "X":
+          valid[`id-${cell}`] = false;
           break;
         default:
+          valid[`id-${cell}`] = false;
+          valid[`id-${id}`] = false;
           canvas[i][j] = "X";
           tooManyClaims++;
       }
