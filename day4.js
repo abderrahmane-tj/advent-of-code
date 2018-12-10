@@ -1089,4 +1089,7 @@ sleepers = Object.keys(sleepers)
   }))
   .sort((a, b) => b.duration - a.duration);
 
+// build map with all the minutes (0 -> 60)
+// then increment for each minute spent asleep
+
 console.log(records);
