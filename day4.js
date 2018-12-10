@@ -1070,12 +1070,12 @@ let sleepers = records.reduce((acc, { id, date, record }) => {
   }
 
   if (record === WAKES) {
-    let duration = date - lastSleep;
+    let duration = (date - lastSleep) / 60000;
     lastSleep = null;
     if (acc[currentId]) {
-      acc[currentId] += duration / 60000;
+      acc[currentId] += duration;
     } else {
-      acc[currentId] = duration / 60000;
+      acc[currentId] = duration;
     }
   }
 
