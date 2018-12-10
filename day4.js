@@ -1042,6 +1042,8 @@ let input = `[1518-06-05 00:46] falls asleep
 [1518-03-10 00:56] wakes up
 [1518-08-17 00:01] Guard #1021 begins shift
 [1518-03-16 00:39] falls asleep`;
+const ASLEEP = "falls asleep";
+const WAKES = "wakes up";
 
 let records = input
   .split("\n")
@@ -1049,8 +1051,42 @@ let records = input
     const parts = line.match(/\[([^)]+)]\s(.*)/);
     const dateText = (parts[1] += ":00+0000");
     const record = parts[2];
-    return { date: new Date(dateText), record };
+    const idParts = line.match(/#([0-9]+)/);
+    const id = idParts ? Number(idParts[1]) : undefined;
+    return { date: new Date(dateText), record, ...(id && { id }) };
   })
   .sort((a, b) => a.date - b.date);
+
+let currentId = null;
+let lastSleep = null;
+
+let sleepers = records.reduce((acc, { id, date, record }) => {
+  if (id) {
+    currentId = id;
+  }
+
+  if (record === ASLEEP) {
+    lastSleep = date;
+  }
+
+  if (record === WAKES) {
+    let duration = date - lastSleep;
+    lastSleep = null;
+    if (acc[currentId]) {
+      acc[currentId] += duration / 60000;
+    } else {
+      acc[currentId] = duration / 60000;
+    }
+  }
+
+  return acc;
+}, {});
+
+sleepers = Object.keys(sleepers)
+  .map(id => ({
+    id: Number(id),
+    duration: sleepers[id]
+  }))
+  .sort((a, b) => b.duration - a.duration);
 
 console.log(records);
